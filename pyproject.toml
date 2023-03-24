@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nopecha"
+version = "1.0.8"
+authors = [
+    {name="NopeCHA", email="nopechasolver@gmail.com"},
+]
+description = "NopeCHA Python Library"
+readme = "README.md"
+requires-python = ">=3.7.1"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://nopecha.com"
+"Documentation" = "https://developers.nopecha.com"
+"GitHub Repository" = "https://github.com/NopeCHALLC/nopecha-python"
