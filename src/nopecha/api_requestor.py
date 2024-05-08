@@ -68,6 +68,8 @@ class APIRequestor:
             return error.InvalidRequestError(error_data, rbody, rcode, resp, rheaders)
         elif rcode == 401:
             return error.AuthenticationError(error_data, rbody, rcode, resp, rheaders)
+        elif rcode == 402:
+            return error.UnavailableFeatureError(error_data, rbody, rcode, resp, rheaders)
         elif rcode == 403:
             return error.InsufficientCreditError(error_data, rbody, rcode, resp, rheaders)
         elif rcode == 409:

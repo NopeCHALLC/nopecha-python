@@ -5,7 +5,7 @@ from nopecha.nopecha import (
     Token,
     Balance,
 )
-from nopecha.error import NopeCHAError, InvalidRequestError, IncompleteJobError, RateLimitError, AuthenticationError, InsufficientCreditError, UnknownError, Timeout, APIError, ServiceUnavailableError
+from nopecha.error import NopeCHAError, InvalidRequestError, IncompleteJobError, RateLimitError, AuthenticationError, UnavailableFeatureError, InsufficientCreditError, UnknownError, Timeout, APIError, ServiceUnavailableError
 
 api_base = os.environ.get("NOPECHA_API_BASE", "https://api.nopecha.com")
 api_key = os.environ.get("NOPECHA_API_KEY")
@@ -21,6 +21,7 @@ __all__ = [
     "IncompleteJobError",
     "RateLimitError",
     "AuthenticationError",
+    "UnavailableFeatureError",
     "InsufficientCreditError",
     "UnknownError",
     "Timeout",

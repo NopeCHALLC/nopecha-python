@@ -28,6 +28,10 @@ class AuthenticationError(NopeCHAError):
     pass
 
 
+class UnavailableFeatureError(NopeCHAError):
+    pass
+
+
 class InsufficientCreditError(NopeCHAError):
     pass
 

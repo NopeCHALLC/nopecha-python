@@ -6,15 +6,15 @@ from nopecha.nopecha_object import NopeCHAObject
 
 class NopeCHARequest(NopeCHAObject):
     @classmethod
-    def get_url(self):
+    def get_url(cls):
         raise NotImplementedError()
 
     @classmethod
-    def get_retries(self):
+    def get_retries(cls):
         raise NotImplementedError()
 
     @classmethod
-    def get_interval(self):
+    def get_interval(cls):
         raise NotImplementedError()
 
     @classmethod
@@ -44,35 +44,35 @@ class NopeCHARequest(NopeCHAObject):
 
 class Recognition(NopeCHARequest):
     @classmethod
-    def get_url(self):
+    def get_url(cls):
         return "/"
 
     @classmethod
-    def get_retries(self):
+    def get_retries(cls):
         return 120
 
     @classmethod
-    def get_interval(self):
+    def get_interval(cls):
         return 1
 
 
 class Token(NopeCHARequest):
     @classmethod
-    def get_url(self):
+    def get_url(cls):
         return "/token"
 
     @classmethod
-    def get_retries(self):
+    def get_retries(cls):
         return 180
 
     @classmethod
-    def get_interval(self):
+    def get_interval(cls):
         return 1
 
 
 class Balance(NopeCHAObject):
     @classmethod
-    def get_url(self):
+    def get_url(cls):
         return "/status"
 
     @classmethod
