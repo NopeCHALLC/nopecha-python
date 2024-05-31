@@ -21,7 +21,6 @@ from .types import (
 )
 from ._throttle import exp_throttle, linear_throttle, sleeper, async_sleeper
 from ._validate import validate_image
-from ._key import is_free_key
 
 logger = getLogger(__name__)
 _error_message = (
@@ -37,13 +36,17 @@ class UniformResponse(typing.NamedTuple):
 
 
 class APIClientMixin:
-    key: str
+    key: str | None = None
     post_max_attempts: int = 10
     get_max_attempts: int = 120
     host = "https://api.nopecha.com"
 
     def __init__(
-        self, key: str, *, post_max_attempts: int = 10, get_max_attempts: int = 120
+        self,
+        key: str | None = None,
+        *,
+        post_max_attempts: int = 10,
+        get_max_attempts: int = 120,
     ):
         self.key = key
         self.post_max_attempts = post_max_attempts
@@ -63,10 +66,12 @@ class APIClientMixin:
         return False
 
     def _get_headers(self) -> dict:
-        return {
+        headers = {
             "user-agent": self._get_useragent(),
-            "authorization": f"Bearer {self.key}",
         }
+        if self.key is not None:
+            headers["authorization"] = f"Bearer {self.key}"
+        return headers
 
     def _get_useragent(self) -> str:
         try:
@@ -109,7 +114,8 @@ class APIClient(ABC, APIClientMixin):
         raise NotImplementedError
 
     def _request(self, endpoint: str, body: typing.Any) -> typing.Any:
-        body["key"] = self.key
+        if self.key is not None:
+            body["key"] = self.key
         job_id = self._request_post(endpoint, body)
 
         get_endpoint = endpoint + "?" + urlencode({"key": self.key, "id": job_id})
@@ -151,11 +157,6 @@ class APIClient(ABC, APIClientMixin):
         return self._request(f"{self.host}/", body)
 
     def solve_raw(self, body: TokenRequest) -> TokenResponse:
-        # this is also enforced server-side, so dont even bother (youll get loads of 502s)
-        if is_free_key(self.key):
-            raise RuntimeError(
-                "You are using a free key, which cannot use the token API."
-            )
         return self._request(f"{self.host}/token/", body)
 
     def status(self) -> StatusResponse:
@@ -382,7 +383,8 @@ class AsyncAPIClient(APIClientMixin):
         raise NotImplementedError
 
     async def _request(self, endpoint: str, body: typing.Any) -> typing.Any:
-        body["key"] = self.key
+        if self.key is not None:
+            body["key"] = self.key
         job_id = await self._request_post(endpoint, body)
 
         get_endpoint = endpoint + "?" + urlencode({"key": self.key, "id": job_id})
