@@ -2,6 +2,12 @@
 
 API bindings for the [NopeCHA](https://nopecha.com) CAPTCHA service.
 
+![PyPI - Version](https://img.shields.io/pypi/v/nopecha?label=PyPI)
+![NPM Version](https://img.shields.io/npm/v/nopecha?label=NPM)
+![GitHub Release](https://img.shields.io/github/v/release/NopeCHALLC/nopecha-extension?label=Extension%20Release&color=4a4)
+![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/dknlfmjaanfblgfdfebhijalfmhmjjjo?label=Chrome%20Web%20Store&color=4a4)
+![Mozilla Add-on Version](https://img.shields.io/amo/v/noptcha?label=Mozilla%20Add-on&color=4a4)
+
 ## Installation
 
 To install from PyPI, run `python3 -m pip install nopecha`.

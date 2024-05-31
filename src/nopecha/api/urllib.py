@@ -3,7 +3,7 @@ from json import dumps, loads
 from logging import getLogger
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
-from http.client import HTTPResponse
+# from http.client import HTTPResponse
 
 from ._base import APIClient, UniformResponse
 
@@ -14,7 +14,7 @@ __all__ = ["UrllibAPIClient"]
 class UrllibAPIClient(APIClient):
     def _get_headers(self) -> dict:
         headers = super()._get_headers()
-        headers.update({ 'content-type': 'application/json' })
+        headers.update({ "content-type": "application/json" })
         return headers
 
     def _request_raw(
@@ -35,7 +35,7 @@ class UrllibAPIClient(APIClient):
                 response = e  # Here, e is an HTTPError object that acts like a response object
 
             status = response.status
-            response_body = response.read().decode('utf-8')  # Decode to string
+            response_body = response.read().decode("utf-8")  # Decode to string
 
             return UniformResponse(status, loads(response_body) if response_body else None)
 
