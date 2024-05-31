@@ -109,8 +109,7 @@ class APIClient(ABC, APIClientMixin):
         raise NotImplementedError
 
     def _request(self, endpoint: str, body: typing.Any) -> typing.Any:
-        if self.key is not None:
-            body["key"] = self.key
+        body["key"] = self.key
         job_id = self._request_post(endpoint, body)
 
         get_endpoint = endpoint + "?" + urlencode({"key": self.key, "id": job_id})

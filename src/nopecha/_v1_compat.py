@@ -6,12 +6,10 @@ from nopecha.api.types import RecognitionRequest, TokenRequest
 
 # urllib is available everywhere, so we can always use this
 from .api.urllib import UrllibAPIClient
-# from .api.requests import RequestsAPIClient
 
 
-api_key = os.getenv("NOPECHA_API_KEY", None)
+api_key = os.getenv("NOPECHA_API_KEY", "")
 client = UrllibAPIClient(api_key)
-# client = RequestsAPIClient(api_key)
 
 
 class Token:
