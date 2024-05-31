@@ -11,6 +11,8 @@ class ErrorCode(IntEnum):
     IncompleteJob = 14
     InvalidKey = 15
     NoCredit = 16
+    UpdateRequired = 17
+    UnavailableFeature = 18
 
 
 class JobQueuedResponse(typing.TypedDict):

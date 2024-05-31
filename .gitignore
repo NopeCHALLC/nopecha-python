@@ -107,3 +107,7 @@ ENV/
 # Mac OS artifacts
 .DS_Store
 ._*
+
+test.py
+upload.sh
+archive/
