@@ -13,7 +13,7 @@ __all__ = ["UrllibAPIClient"]
 class UrllibAPIClient(APIClient):
     def _get_headers(self) -> dict:
         headers = super()._get_headers()
-        headers.update({"content-type": "application/json"})
+        headers.update({ "content-type": "application/json" })
         return headers
 
     def _request_raw(

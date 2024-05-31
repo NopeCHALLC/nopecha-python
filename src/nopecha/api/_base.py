@@ -69,7 +69,7 @@ class APIClientMixin:
         headers = {
             "user-agent": self._get_useragent(),
         }
-        if self.key is not None:
+        if self.key:
             headers["authorization"] = f"Bearer {self.key}"
         return headers
 
@@ -114,11 +114,11 @@ class APIClient(ABC, APIClientMixin):
         raise NotImplementedError
 
     def _request(self, endpoint: str, body: typing.Any) -> typing.Any:
-        if self.key is not None:
+        if self.key:
             body["key"] = self.key
         job_id = self._request_post(endpoint, body)
 
-        get_endpoint = endpoint + "?" + urlencode({"key": self.key, "id": job_id})
+        get_endpoint = endpoint + "?" + urlencode({ "key": self.key, "id": job_id })
         return self._request_get(get_endpoint)
 
     def _request_post(self, endpoint: str, body: typing.Any) -> str:
@@ -160,7 +160,7 @@ class APIClient(ABC, APIClientMixin):
         return self._request(f"{self.host}/token/", body)
 
     def status(self) -> StatusResponse:
-        url = f"{self.host}/status/?" + urlencode({"key": self.key})
+        url = f"{self.host}/status/?" + urlencode({ "key": self.key })
         for _ in sleeper(linear_throttle(max_attempts=self.get_max_attempts)):
             status_request = self._request_raw("GET", url)
             if self._should_retry(status_request):
@@ -285,7 +285,7 @@ class APIClient(ABC, APIClientMixin):
             "url": url,
             "enterprise": enterprise,
             "proxy": proxy,
-            "data": {"rqdata": rqdata} if rqdata is not None else None,
+            "data": { "rqdata": rqdata } if rqdata is not None else None,
             "useragent": useragent,
         }
         return typing.cast(TokenResponse, self.solve_raw(body))
@@ -315,7 +315,7 @@ class APIClient(ABC, APIClientMixin):
             "url": url,
             "proxy": proxy,
             "useragent": useragent,
-            "data": {"s": sdata} if sdata is not None else None,
+            "data": { "s": sdata } if sdata is not None else None,
             "enterprise": enterprise,
         }
         return typing.cast(TokenResponse, self.solve_raw(body))
@@ -345,7 +345,7 @@ class APIClient(ABC, APIClientMixin):
             "url": url,
             "proxy": proxy,
             "useragent": useragent,
-            "data": {"action": action} if action is not None else None,
+            "data": { "action": action } if action is not None else None,
             "enterprise": enterprise,
         }
         return typing.cast(TokenResponse, self.solve_raw(body))
@@ -383,11 +383,11 @@ class AsyncAPIClient(APIClientMixin):
         raise NotImplementedError
 
     async def _request(self, endpoint: str, body: typing.Any) -> typing.Any:
-        if self.key is not None:
+        if self.key:
             body["key"] = self.key
         job_id = await self._request_post(endpoint, body)
 
-        get_endpoint = endpoint + "?" + urlencode({"key": self.key, "id": job_id})
+        get_endpoint = endpoint + "?" + urlencode({ "key": self.key, "id": job_id })
         return await self._request_get(get_endpoint)
 
     async def _request_post(self, endpoint: str, body: typing.Any) -> str:
@@ -431,7 +431,7 @@ class AsyncAPIClient(APIClientMixin):
         return await self._request("/token/", body)
 
     async def status(self) -> StatusResponse:
-        url = f"{self.host}/status/?" + urlencode({"key": self.key})
+        url = f"{self.host}/status/?" + urlencode({ "key": self.key })
         async for _ in async_sleeper(
             linear_throttle(max_attempts=self.get_max_attempts)
         ):
@@ -560,7 +560,7 @@ class AsyncAPIClient(APIClientMixin):
             "url": url,
             "enterprise": enterprise,
             "proxy": proxy,
-            "data": {"rqdata": rqdata} if rqdata is not None else None,
+            "data": { "rqdata": rqdata } if rqdata is not None else None,
             "useragent": useragent,
         }
         return typing.cast(TokenResponse, await self.solve_raw(body))
@@ -590,7 +590,7 @@ class AsyncAPIClient(APIClientMixin):
             "url": url,
             "proxy": proxy,
             "useragent": useragent,
-            "data": {"s": sdata} if sdata is not None else None,
+            "data": { "s": sdata } if sdata is not None else None,
             "enterprise": enterprise,
         }
         return typing.cast(TokenResponse, await self.solve_raw(body))
@@ -620,7 +620,7 @@ class AsyncAPIClient(APIClientMixin):
             "url": url,
             "proxy": proxy,
             "useragent": useragent,
-            "data": {"action": action} if action is not None else None,
+            "data": { "action": action } if action is not None else None,
             "enterprise": enterprise,
         }
         return typing.cast(TokenResponse, await self.solve_raw(body))
