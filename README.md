@@ -1,87 +1,101 @@
-# NopeCHA Python Library
+# NopeCHA
 
-The NopeCHA Python library provides convenient access to the NopeCHA API
-from applications written in the Python language. It includes a
-pre-defined set of classes for API resources that initialize
-themselves dynamically from API responses.
-
-
-## Supported CAPTCHA types:
-- reCAPTCHA v2
-- reCAPTCHA v3
-- reCAPTCHA Enterprise
-- hCaptcha
-- hCaptcha Enterprise
-- FunCAPTCHA
-- AWS WAF CAPTCHA
-- Text-based CAPTCHA
-
-
-## Documentation
-
-See the [NopeCHA API docs](https://developers.nopecha.com).
-
+API bindings for the [NopeCHA](https://nopecha.com) CAPTCHA service.
 
 ## Installation
 
-You don't need this source code unless you want to modify the package. If you just
-want to use the package, just run:
+To install from PyPI, run `python3 -m pip install nopecha`.
 
-```sh
-pip install --upgrade nopecha
-```
+## API Usage
 
-Install from source with:
+This package provides API wrappers for the following http packages:
 
-```sh
-python setup.py install
-```
+- [`requests`](https://pypi.org/project/requests/) (sync)
+- [`aiohttp`](https://pypi.org/project/aiohttp/) (async)
+- [`httpx`](https://pypi.org/project/httpx/) (sync & async)
+- [`urllib`](https://docs.python.org/3/library/urllib.html) (sync, built-in)
 
-## Usage
+Note: You will need to install the http package you want to use separately
+(except for `urllib`, as it's built-in but not recommended).
 
-The library needs to be configured with your account's secret key which is available on the [website](https://nopecha.com/manage). Either set it as the `NOPECHA_API_KEY` environment variable before using the library:
-
-```bash
-export NOPECHA_API_KEY='...'
-```
-
-Or set `nopecha.api_key` to its value:
+### Requests example
 
 ```python
-import nopecha
-nopecha.api_key = "..."
+from nopecha.api.requests import RequestsAPIClient
 
-# solve a recognition challenge
-clicks = nopecha.Recognition.solve(
-    type='hcaptcha',
-    task='Please click each image containing a cat-shaped cookie.',
-    image_urls=[f"https://nopecha.com/image/demo/hcaptcha/{i}.png" for i in range(9)],
-)
+api = RequestsAPIClient("YOUR_API_KEY")
+solution = api.solve_hcaptcha("b4c45857-0e23-48e6-9017-e28fff99ffb2", "https://nopecha.com/demo/hcaptcha#easy")
 
-# print the grids to click
-print(clicks)
-
-# solve a token
-token = nopecha.Token.solve(
-    type='hcaptcha',
-    sitekey='ab803303-ac41-41aa-9be1-7b4e01b91e2c',
-    url='https://nopecha.com/demo/hcaptcha',
-)
-
-# print the token
-print(token)
-
-# get the current balance
-balance = nopecha.Balance.get()
-
-# print the current balance
-print(balance)
+print("token is", solution["data"])
 ```
 
-## Requirements
+### Async HTTPX example
 
-- Python 3.7.1+
+```python
+from nopecha.api.httpx import AsyncHTTPXAPIClient
 
-In general, we want to support the versions of Python that our
-customers are using. If you run into problems with any version
-issues, please let us know at support@nopecha.com.
+async def main():
+    api = AsyncHTTPXAPIClient("YOUR_API_KEY")
+    solution = await api.solve_hcaptcha("b4c45857-0e23-48e6-9017-e28fff99ffb2", "https://nopecha.com/demo/hcaptcha#easy")
+    print("token is", solution["data"])
+
+asyncio.run(main())
+```
+
+## Extension builder
+
+This package also provides a extension builder for
+[Automation builds](https://developers.nopecha.com/guides/extension_advanced/#automation-build)
+which includes:
+
+1. downloading the extension
+2. updating the extension
+3. updating the extension's manifest to include your settings
+
+### Example
+
+```python
+from nopecha.extension import build_chromium
+
+# will download the extension to the current working directory
+output = build_chromium({
+    "key": "YOUR_API_KEY",
+})
+
+# custom output directory
+from pathlib import Path
+output = build_chromium({
+    "key": "YOUR_API_KEY",
+}, Path("extension"))
+```
+
+You can plug the output path directly into your browser's extension manager to
+load the extension:
+
+```python
+import undetected_chromedriver as uc
+from nopecha.extension import build_chromium
+
+output = build_chromium({
+    "key": "YOUR_API_KEY",
+})
+
+options = uc.ChromeOptions()
+options.add_argument(f"load-extension={output}")
+```
+
+## Building
+
+To build from source, you will need to install
+[`build`](https://packaging.python.org/en/latest/key_projects/#build)
+(`python3 -m pip install --upgrade build `).
+
+Then simply run `python3 -m build` to build the package.
+
+#### Uploading to PyPI
+
+To upload to PyPI, you will need to install
+[`twine`](https://packaging.python.org/en/latest/key_projects/#twine)
+(`python3 -m pip install --upgrade twine`).
+
+Then simply run `python3 -m twine upload dist/*` to upload the package.
