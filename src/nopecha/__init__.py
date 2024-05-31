@@ -2,21 +2,15 @@ import typing
 import warnings
 
 
-_v1_compat = None
-
-
 def __getattr__(name: str) -> typing.Any:
     if name in ("Recognition", "Token", "Balance", "api_key"):
         warnings.warn(
             f"the V1 API is deprecated, please migrate to the V2 API",
             DeprecationWarning,
         )
-        global _v1_compat
-        if _v1_compat is None:
-            from . import _v1_compat as compat
+        from . import _v1_compat as compat
 
-            _v1_compat = compat
-        return getattr(_v1_compat, name)
+        return getattr(compat, name)
     raise AttributeError(f"module {__name__} has no attribute {name}")
 
 
@@ -26,9 +20,6 @@ def __setattr__(name: str, value: typing.Any) -> None:
             f"the V1 API is deprecated, please migrate to the V2 API",
             DeprecationWarning,
         )
-        global _v1_compat
-        if _v1_compat is None:
-            from . import _v1_compat as compat
+        from . import _v1_compat as compat
 
-            _v1_compat = compat
-        _v1_compat.api_key = value
+        compat.api_key = value
