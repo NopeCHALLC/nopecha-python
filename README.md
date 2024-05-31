@@ -99,3 +99,76 @@ To upload to PyPI, you will need to install
 (`python3 -m pip install --upgrade twine`).
 
 Then simply run `python3 -m twine upload dist/*` to upload the package.
+
+## Migrate from v1
+
+If you are migrating from v1, you will need to update your code to use the new
+client classes.
+
+V1 was synchronous only, using the requests HTTP library. V2 supports both
+synchronous and asynchronous code, and multiple HTTP libraries.
+
+To migrate, you will need to:
+
+1. Install the http library you want to use (requests, aiohttp, httpx) or use
+   the built-in urllib.
+2. Replace `nopecha.api_key` with creating a client instance.
+
+```py
+# Before
+import nopecha
+
+nopecha.api_key = "YOUR_API_KEY"
+
+# Now
+from nopecha.api.requests import RequestsAPIClient
+
+client = RequestsAPIClient("YOUR_API_KEY")
+```
+
+3. Replace
+   `nopecha.Token.solve()`/`nopecha.Recognition.solve()`/`nopecha.Balance.get()`
+   with the appropriate method on the client instance.
+
+```py
+# Before
+import nopecha
+nopecha.api_key = "..."
+
+clicks = nopecha.Recognition.solve(
+    type='hcaptcha',
+    task='Please click each image containing a cat-shaped cookie.',
+    image_urls=[f"https://nopecha.com/image/demo/hcaptcha/{i}.png" for i in range(9)],
+)
+print(clicks)
+
+token = nopecha.Token.solve(
+    type='hcaptcha',
+    sitekey='ab803303-ac41-41aa-9be1-7b4e01b91e2c',
+    url='https://nopecha.com/demo/hcaptcha',
+)
+print(token)
+
+balance = nopecha.Balance.get()
+print(balance)
+
+# Now
+from nopecha.api.requests import RequestsAPIClient
+
+client = RequestsAPIClient("YOUR_API_KEY")
+
+clicks = client.recognize_hcaptcha(
+    'Please click each image containing a cat-shaped cookie.',
+    [f"https://nopecha.com/image/demo/hcaptcha/{i}.png" for i in range(9)],
+)
+print(clicks)
+
+token = client.solve_hcaptcha(
+    'ab803303-ac41-41aa-9be1-7b4e01b91e2c',
+    'https://nopecha.com/demo/hcaptcha',
+)
+print(token)
+
+balance = client.status()
+print(balance)
+```
