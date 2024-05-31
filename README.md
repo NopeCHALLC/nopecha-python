@@ -1,12 +1,12 @@
 # NopeCHA
 
-API bindings for the [NopeCHA](https://nopecha.com) CAPTCHA service.
-
 ![PyPI - Version](https://img.shields.io/pypi/v/nopecha?label=PyPI&link=https%3A%2F%2Fnopecha.com&link=https%3A%2F%2Fnopecha.com%2Fpypi)
 ![NPM Version](https://img.shields.io/npm/v/nopecha?label=NPM&link=https%3A%2F%2Fnopecha.com&link=https%3A%2F%2Fnopecha.com%2Fnpm)
 ![GitHub Release](https://img.shields.io/github/v/release/NopeCHALLC/nopecha-extension?label=Extension%20Release&color=4a4&link=https%3A%2F%2Fnopecha.com&link=https%3A%2F%2Fnopecha.com%2Fgithub)
 ![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/dknlfmjaanfblgfdfebhijalfmhmjjjo?label=Chrome%20Web%20Store&color=4a4&link=https%3A%2F%2Fnopecha.com&link=https%3A%2F%2Fnopecha.com%2Fchrome)
 ![Mozilla Add-on Version](https://img.shields.io/amo/v/noptcha?label=Mozilla%20Add-on&color=4a4&link=https%3A%2F%2Fnopecha.com&link=https%3A%2F%2Fnopecha.com%2Ffirefox)
+
+API bindings for the [NopeCHA](https://nopecha.com) CAPTCHA service.
 
 ## Installation
 
