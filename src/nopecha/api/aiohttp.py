@@ -1,12 +1,12 @@
 import typing
 from logging import getLogger
 
-from aiohttp import ClientSession
-
 try:
     import aiohttp
 except ImportError:
     raise ImportError("You must install 'aiohttp' to use `nopecha.api.aiohttp`")
+
+from aiohttp import ClientSession
 
 from ._base import AsyncAPIClient, UniformResponse
 
