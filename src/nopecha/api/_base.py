@@ -7,9 +7,6 @@ from .types import (
     AudioRecognitionRequest,
     ErrorCode,
     GeneralTokenRequest,
-    HCaptchaAreaSelectRequest,
-    HCaptchaAreaSelectResponse,
-    HCaptchaMultipleChoiceRequest,
     ImageRecognitionRequest,
     Proxy,
     RecognitionRequest,
@@ -173,59 +170,6 @@ class APIClient(ABC, APIClientMixin):
             _error_message.format("get status", self.get_max_attempts, "get")
         )
 
-    def recognize_hcaptcha(
-        self, task: str, images: typing.List[str]
-    ) -> RecognitionResponse:
-        for image in images:
-            validate_image(image)
-
-        body: ImageRecognitionRequest = {
-            "type": "hcaptcha",
-            "task": task,
-            "image_data": images,
-        }
-        return typing.cast(RecognitionResponse, self.recognize_raw(body))
-
-    def recognize_hcaptcha_area_select(
-        self,
-        task: str,
-        image: str,
-        image_examples: typing.Optional[typing.List[str]] = None,
-    ) -> HCaptchaAreaSelectResponse:
-        validate_image(image)
-        if image_examples is not None:
-            for image_example in image_examples:
-                validate_image(image_example)
-
-        body: HCaptchaAreaSelectRequest = {
-            "type": "hcaptcha_area_select",
-            "task": task,
-            "image_data": (image,),
-            "image_examples": image_examples,
-        }
-        return typing.cast(HCaptchaAreaSelectResponse, self.recognize_raw(body))
-
-    def recognize_hcaptcha_multiple_choice(
-        self,
-        task: str,
-        image: str,
-        choices: typing.List[str],
-        image_choices: typing.Optional[typing.List[str]] = None,
-    ) -> HCaptchaMultipleChoiceRequest:
-        validate_image(image)
-        if image_choices is not None:
-            for image_choice in image_choices:
-                validate_image(image_choice)
-
-        body: HCaptchaMultipleChoiceRequest = {
-            "type": "hcaptcha_multiple_choice",
-            "task": task,
-            "image_data": (image,),
-            "choices": choices,
-            "image_choices": image_choices,
-        }
-        return typing.cast(HCaptchaMultipleChoiceRequest, self.recognize_raw(body))
-
     def recognize_recaptcha(
         self, task: str, images: typing.List[str]
     ) -> RecognitionResponse:
@@ -269,36 +213,6 @@ class APIClient(ABC, APIClientMixin):
             "audio_data": (audio,),
         }
         return typing.cast(RecognitionResponse, self.recognize_raw(body))
-
-    def solve_hcaptcha(
-        self,
-        sitekey: str,
-        url: str,
-        *,
-        enterprise: bool = False,
-        proxy: typing.Optional[Proxy] = None,
-        useragent: typing.Optional[str] = None,
-        rqdata: typing.Optional[str] = None,
-    ) -> TokenResponse:
-        if not enterprise and rqdata is not None:
-            logger.warning(
-                "you are setting rqdata for non-enterprise hcaptcha, this makes no sense"
-            )
-        elif enterprise and proxy is None:
-            logger.warning(
-                "you are using enterprise hcaptcha without a proxy, probably won't work"
-            )
-
-        body: GeneralTokenRequest = {
-            "type": "hcaptcha",
-            "sitekey": sitekey,
-            "url": url,
-            "enterprise": enterprise,
-            "proxy": proxy,
-            "data": {"rqdata": rqdata} if rqdata is not None else None,
-            "useragent": useragent,
-        }
-        return typing.cast(TokenResponse, self.solve_raw(body))
 
     def solve_recaptcha_v2(
         self,
@@ -451,61 +365,6 @@ class AsyncAPIClient(APIClientMixin):
             _error_message.format("get status", self.get_max_attempts, "get")
         )
 
-    async def recognize_hcaptcha(
-        self, task: str, images: typing.List[str]
-    ) -> RecognitionResponse:
-        for image in images:
-            validate_image(image)
-
-        body: ImageRecognitionRequest = {
-            "type": "hcaptcha",
-            "task": task,
-            "image_data": images,
-        }
-        return typing.cast(RecognitionResponse, await self.recognize_raw(body))
-
-    async def recognize_hcaptcha_area_select(
-        self,
-        task: str,
-        image: str,
-        image_examples: typing.Optional[typing.List[str]] = None,
-    ) -> HCaptchaAreaSelectResponse:
-        validate_image(image)
-        if image_examples is not None:
-            for image_example in image_examples:
-                validate_image(image_example)
-
-        body: HCaptchaAreaSelectRequest = {
-            "type": "hcaptcha_area_select",
-            "task": task,
-            "image_data": (image,),
-            "image_examples": image_examples,
-        }
-        return typing.cast(HCaptchaAreaSelectResponse, await self.recognize_raw(body))
-
-    async def recognize_hcaptcha_multiple_choice(
-        self,
-        task: str,
-        image: str,
-        choices: typing.List[str],
-        image_choices: typing.Optional[typing.List[str]] = None,
-    ) -> HCaptchaMultipleChoiceRequest:
-        validate_image(image)
-        if image_choices is not None:
-            for image_choice in image_choices:
-                validate_image(image_choice)
-
-        body: HCaptchaMultipleChoiceRequest = {
-            "type": "hcaptcha_multiple_choice",
-            "task": task,
-            "image_data": (image,),
-            "choices": choices,
-            "image_choices": image_choices,
-        }
-        return typing.cast(
-            HCaptchaMultipleChoiceRequest, await self.recognize_raw(body)
-        )
-
     async def recognize_recaptcha(
         self, task: str, images: typing.List[str]
     ) -> RecognitionResponse:
@@ -549,36 +408,6 @@ class AsyncAPIClient(APIClientMixin):
             "audio_data": (audio,),
         }
         return typing.cast(RecognitionResponse, await self.recognize_raw(body))
-
-    async def solve_hcaptcha(
-        self,
-        sitekey: str,
-        url: str,
-        *,
-        enterprise: bool = False,
-        proxy: typing.Optional[Proxy] = None,
-        useragent: typing.Optional[str] = None,
-        rqdata: typing.Optional[str] = None,
-    ) -> TokenResponse:
-        if not enterprise and rqdata is not None:
-            logger.warning(
-                "you are setting rqdata for non-enterprise hcaptcha, this makes no sense"
-            )
-        elif enterprise and proxy is None:
-            logger.warning(
-                "you are using enterprise hcaptcha without a proxy, probably won't work"
-            )
-
-        body: GeneralTokenRequest = {
-            "type": "hcaptcha",
-            "sitekey": sitekey,
-            "url": url,
-            "enterprise": enterprise,
-            "proxy": proxy,
-            "data": {"rqdata": rqdata} if rqdata is not None else None,
-            "useragent": useragent,
-        }
-        return typing.cast(TokenResponse, await self.solve_raw(body))
 
     async def solve_recaptcha_v2(
         self,

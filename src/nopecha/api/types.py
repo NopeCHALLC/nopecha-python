@@ -33,7 +33,7 @@ class Proxy(typing.TypedDict):
 
 
 class ImageRecognitionRequest(typing.TypedDict):
-    type: typing.Literal["funcaptcha", "hcaptcha", "recaptcha"]
+    type: typing.Literal["funcaptcha", "recaptcha"]
     task: str
     image_data: typing.List[str]
 
@@ -41,21 +41,6 @@ class ImageRecognitionRequest(typing.TypedDict):
 class TextCaptchaRecognitionRequest(typing.TypedDict):
     type: typing.Literal["textcaptcha"]
     image_data: typing.Tuple[str]
-
-
-class HCaptchaAreaSelectRequest(typing.TypedDict):
-    type: typing.Literal["hcaptcha_area_select"]
-    task: str
-    image_data: typing.Tuple[str]
-    image_examples: typing.Optional[typing.List[str]]
-
-
-class HCaptchaMultipleChoiceRequest(typing.TypedDict):
-    type: typing.Literal["hcaptcha_multiple_choice"]
-    task: str
-    image_data: typing.Tuple[str]
-    choices: typing.List[str]
-    image_choices: typing.Optional[typing.List[str]]
 
 
 class AudioRecognitionRequest(typing.TypedDict):
@@ -66,8 +51,6 @@ class AudioRecognitionRequest(typing.TypedDict):
 RecognitionRequest = typing.Union[
     ImageRecognitionRequest,
     TextCaptchaRecognitionRequest,
-    HCaptchaMultipleChoiceRequest,
-    HCaptchaAreaSelectRequest,
     AudioRecognitionRequest,
 ]
 
@@ -76,31 +59,14 @@ class ImageRecognitionResponse(typing.TypedDict):
     data: typing.List[str]
 
 
-class HCaptchaAreaSelectResponseData(typing.TypedDict):
-    x: int
-    y: int
-    w: int  # in % (0-100)
-    h: int  # in % (0-100)
-
-
-class HCaptchaAreaSelectResponse(typing.TypedDict):
-    data: HCaptchaAreaSelectResponseData
-
-
-class HCaptchaMultipleChoiceResponse(typing.TypedDict):
-    data: str
-
-
-RecognitionResponse = typing.Union[
-    ImageRecognitionResponse, HCaptchaMultipleChoiceResponse, HCaptchaAreaSelectResponse
-]
+RecognitionResponse = typing.Union[ImageRecognitionResponse,]
 
 
 class GeneralTokenRequest(typing.TypedDict):
-    type: typing.Literal["hcaptcha", "recaptcha2", "recaptcha3"]
+    type: typing.Literal["recaptcha2", "recaptcha3"]
     sitekey: str
     url: str
-    enterprise: typing.Optional[bool]  # only for recaptcha and hcaptcha
+    enterprise: typing.Optional[bool]  # only for recaptcha
     data: typing.Optional[typing.Dict[str, typing.Any]]
     proxy: typing.Optional[Proxy]
     useragent: typing.Optional[str]

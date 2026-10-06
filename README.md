@@ -30,7 +30,7 @@ Note: You will need to install the http package you want to use separately
 from nopecha.api.requests import RequestsAPIClient
 
 api = RequestsAPIClient("YOUR_API_KEY")
-solution = api.solve_hcaptcha("b4c45857-0e23-48e6-9017-e28fff99ffb2", "https://nopecha.com/demo/hcaptcha#easy")
+solution = api.solve_recaptcha("6Ld8NA8jAAAAAPJ_ahIPVIMc0C4q58rntFkopFiA", "https://nopecha.com/demo/recaptcha#easy")
 
 print("token is", solution["data"])
 ```
@@ -42,7 +42,7 @@ from nopecha.api.httpx import AsyncHTTPXAPIClient
 
 async def main():
     api = AsyncHTTPXAPIClient("YOUR_API_KEY")
-    solution = await api.solve_hcaptcha("b4c45857-0e23-48e6-9017-e28fff99ffb2", "https://nopecha.com/demo/hcaptcha#easy")
+    solution = await api.solve_recaptcha("6Ld8NA8jAAAAAPJ_ahIPVIMc0C4q58rntFkopFiA", "https://nopecha.com/demo/recaptcha#easy")
     print("token is", solution["data"])
 
 asyncio.run(main())
@@ -142,16 +142,16 @@ import nopecha
 nopecha.api_key = "..."
 
 clicks = nopecha.Recognition.solve(
-    type='hcaptcha',
-    task='Please click each image containing a cat-shaped cookie.',
-    image_urls=[f"https://nopecha.com/image/demo/hcaptcha/{i}.png" for i in range(9)],
+    type='recaptcha',
+    task='Select all squares with vehicles.',
+    image_urls=['https://nopecha.com/image/demo/recaptcha/4x4.png'],
 )
 print(clicks)
 
 token = nopecha.Token.solve(
-    type='hcaptcha',
-    sitekey='ab803303-ac41-41aa-9be1-7b4e01b91e2c',
-    url='https://nopecha.com/demo/hcaptcha',
+    type='recaptcha',
+    sitekey='6Ld8NA8jAAAAAPJ_ahIPVIMc0C4q58rntFkopFiA',
+    url='https://nopecha.com/demo/recaptcha#easy',
 )
 print(token)
 
@@ -163,15 +163,15 @@ from nopecha.api.requests import RequestsAPIClient
 
 client = RequestsAPIClient("YOUR_API_KEY")
 
-clicks = client.recognize_hcaptcha(
-    'Please click each image containing a cat-shaped cookie.',
-    [f"https://nopecha.com/image/demo/hcaptcha/{i}.png" for i in range(9)],
+clicks = client.recognize_recaptcha(
+    'Select all squares with vehicles.',
+    ['https://nopecha.com/image/demo/recaptcha/4x4.png'],
 )
 print(clicks)
 
-token = client.solve_hcaptcha(
-    'ab803303-ac41-41aa-9be1-7b4e01b91e2c',
-    'https://nopecha.com/demo/hcaptcha',
+token = client.solve_recaptcha(
+    '6Ld8NA8jAAAAAPJ_ahIPVIMc0C4q58rntFkopFiA',
+    'https://nopecha.com/demo/recaptcha#easy',
 )
 print(token)
 
