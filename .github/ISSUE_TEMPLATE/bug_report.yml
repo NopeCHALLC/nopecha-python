@@ -1,0 +1,75 @@
+name: Extension bug report
+description: Report a bug with the NopeCHA SDK.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form only for issues with the NopeCHA SDK.
+
+        For API, account, billing, dashboard, website, or other non-SDK issues, contact support@nopecha.com.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Issue scope
+      options:
+        - label: This issue is about the NopeCHA SDK not the API, account, billing, dashboard, or website.
+          required: true
+        - label: This issue is NOT about recognition quality
+          required: true
+  - type: input
+    id: sdk-version
+    attributes:
+      label: SDK version
+      placeholder: "0.6.1"
+    validations:
+      required: true
+  - type: input
+    id: programming-language-version
+    attributes:
+      label: Programming language version
+      placeholder: "CPython 3.14"
+    validations:
+      required: true
+  - type: dropdown
+    id: captcha-type
+    attributes:
+      label: CAPTCHA type
+      options:
+        - reCAPTCHA
+        - FunCAPTCHA
+        - AWS WAF
+        - Cloudflare Turnstile
+        - GeeTest
+        - PerimeterX
+        - Text CAPTCHA
+        - Other
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the page URL if it can be shared publicly.
+      placeholder: |
+        1. Go to ...
+        2. Open a page with ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Add SDK logs, screenshots, or screen recordings if available. Remove secrets such as API keys.
+      render: text
+    validations:
+      required: false
